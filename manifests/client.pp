@@ -14,6 +14,12 @@
 #                                name service information.
 #
 # $attribute_maps::              Attribute mappings used by the client.
+#                                Specified as a hash in the form
+#                                { $service => $map }. e.g.
+#                                { 'automount' => 'automountMapName=ou' } or
+#                                { 'homeDirectory' => 'mailDirectory' }.
+#                                Exactly how these entries are used is
+#                                dependent on the template used.
 #
 # $authentication_method::       Identifies the method of authentication used
 #                                by the client. The default is "none"
@@ -22,13 +28,13 @@
 # $conf_template::               The template to use for the client
 #                                configuration file.
 #
-# $config_hash::                 A hash containing key-value pairs to be
+# $default_search_scope::        Default scope used when performing a search.
+#                                Valid values are "one" or "sub".
+#
+# $options::                     A hash containing key-value pairs to be
 #                                inserted into the configuration file. How
 #                                they are used is dependent on the template
 #                                used.
-#
-# $default_search_scope::        Default scope used when performing a search.
-#                                Valid values are "one" or "sub".
 #
 # $service_search_descriptors::  An array containing search descriptors
 #                                required, used, or supported by the in-line
@@ -42,13 +48,16 @@
 # == Sample Usage:
 #
 #   class { 'ldap::client':
-#     server_list                => ['ldap1.cat.pdx.edu', 'ldap2.cat.pdx.edu'],
+#     server_list                => 'ldaps://ldap.cat.pdx.edu',
 #     service_search_base        => 'dc=cat,dc=pdx,dc=edu',
 #     service_search_descriptors => [
 #       'passwd:ou=people,dc=cat,dc=pdx,dc=edu',
 #       'shadow:ou=people,dc=cat,dc=pdx,dc=edu?one?pod=cat',
 #       'group:ou=group,dc=cat,dc=pdx,dc=edu',
 #     ],
+#     attribute_maps    => {
+#       'mailDirectory' =>
+#     },
 #   }
 #
 class ldap::client (
@@ -57,8 +66,8 @@ class ldap::client (
   $attribute_maps              = undef,
   $authentication_method       = 'none',
   $conf_template               = undef,
-  $config_hash                 = undef,
   $default_search_scope        = 'one',
+  $options                     = undef,
   $service_search_descriptors  = undef
 ) {
 

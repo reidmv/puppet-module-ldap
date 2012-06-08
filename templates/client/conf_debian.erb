@@ -1,0 +1,15 @@
+URI  <%= [@server_list].flatten.join(' ') %>
+BASE <%= @default_search_base %>
+<% if @service_search_descriptors && @service_search_descriptors != :undef -%>
+<%=
+  @service_search_descriptors.map do |d|
+    "nss_base_#{d.split(':')[0]} #{d.split(':')[1]}\n"
+  end.to_s
+%>
+<% end -%>
+<% if @attribute_maps && @attribute_maps != :undef -%>
+<%= @attribute_maps.map{|k,v| "nss_attribute_map #{k} #{v}\n" }.sort.to_s %>
+<% end -%>
+<% if @options && @options != :undef -%>
+<%= @options.map{|k,v| "#{k} #{v}\n" }.sort.to_s %>
+<% end -%>
