@@ -1,15 +1,24 @@
-URI  <%= [@server_list].flatten.join(' ') %>
+URI  <%= 
+  protocol = /tls|sasl/.match(@authentication_method) ? 'ldaps://' : 'ldap://'
+  [@server_list].flatten.map{|s| s.sub(%r{^(?!ldaps?://)}, protocol) }.join(' ')
+%>
 BASE <%= @default_search_base %>
 <% if @service_search_descriptors && @service_search_descriptors != :undef -%>
 <%=
   @service_search_descriptors.map do |d|
-    "nss_base_#{d.split(':')[0]} #{d.split(':')[1]}\n"
+    d = d.split(':')
+    "nss_base_#{d[0]} #{d[1]}\n"
   end.to_s
-%>
+-%>
 <% end -%>
 <% if @attribute_maps && @attribute_maps != :undef -%>
-<%= @attribute_maps.map{|k,v| "nss_attribute_map #{k} #{v}\n" }.sort.to_s %>
+<%=
+  @attribute_maps.map do |m|
+    m = m.split(/:|=/)
+    "nss_map_attribute #{m[1]} #{m[2]}\n"
+  end.to_s
+-%>
 <% end -%>
 <% if @options && @options != :undef -%>
-<%= @options.map{|k,v| "#{k} #{v}\n" }.sort.to_s %>
+<%= @options.map{|o| "#{o}\n" }.to_s -%>
 <% end -%>

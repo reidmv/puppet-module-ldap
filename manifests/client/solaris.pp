@@ -1,0 +1,1 @@
+class ldap::client::solaris { }
