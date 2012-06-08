@@ -11,7 +11,7 @@ class ldap::client::debian {
   }
 
   exec { 'ldap::client::debian pam-auth-update':
-    command => 'false',
+    command => 'pam-auth-update --package ldap',
     unless  => 'pam-auth-update --package ldap',
   }
 
