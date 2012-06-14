@@ -69,6 +69,7 @@
 class ldap::client (
   $default_search_base,
   $server_list,
+  $dua_config_profile             = undef,
   $attribute_maps                 = undef,
   $authentication_method          = 'none',
   $conf_template                  = undef,
@@ -118,10 +119,10 @@ class ldap::client (
   case $::osfamily {
     default:  { } # no extra configuration needed
     'Debian': {
-      include ldap::client::debian
+      class { 'ldap::client::debian': }
     }
     'Solaris': {
-      include ldap::client::solaris
+      class { 'ldap::client::solaris': }
     }
   }
 
