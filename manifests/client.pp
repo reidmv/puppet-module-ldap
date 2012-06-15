@@ -57,7 +57,7 @@
 #     server_list                => 'ldaps://ldap.cat.pdx.edu',
 #     default_search_base        => 'dc=cat,dc=pdx,dc=edu',
 #     attribute_maps             => {
-#       'homeDirectory' => 'mailDirectory',
+#       'automount:automountKey=cn',
 #     },
 #     service_search_descriptors => [
 #       'passwd:ou=people,dc=cat,dc=pdx,dc=edu',
