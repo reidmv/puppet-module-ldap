@@ -118,6 +118,12 @@ class ldap::client (
   # generalize can't be generalized. Split out more configuration by osfamily
   case $::osfamily {
     default:  { } # no extra configuration needed
+    'RedHat': {
+      class { 'ldap::client::redhat':
+        server_list         => $server_list,
+        default_search_base => $default_search_base,
+      }
+    }
     'Debian': {
       class { 'ldap::client::debian': }
     }
